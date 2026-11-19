@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Vista Plumbing — Website Audit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #06080D;
+      --text: #F8FAFC;
+      --text-muted: #CBD5E1;
+      --text-dim: #94A3B8;
+      --crimson: #EF4444;
+      --emerald: #10B981;
+      --amber: #F59E0B;
+      --blue: #3B82F6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 100px;
+      position: relative;
+      overflow-x: hidden;
+      width: 100%;
+    }
+
+    /* Tasteful typographic emphasis (Bold, Italic, Highlight, Underline) */
+    strong {
+      color: #FFFFFF;
+      font-weight: 700;
+    }
+
+    em {
+      font-style: italic;
+      color: #F1F5F9;
+    }
+
+    u {
+      text-decoration: underline;
+      text-decoration-color: rgba(96, 165, 250, 0.55);
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1.5px;
+    }
+
+    .text-highlight {
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 5px;
+      padding: 1px 7px;
+      color: #93C5FD;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .text-warn-highlight {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.28);
+      border-radius: 5px;
+      padding: 1px 7px;
+      color: #FCA5A5;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* Multi-layered Ambient Light Effects (Constrained to prevent mobile overflow) */
+    .spotlight-top {
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: clamp(340px, 90vw, 900px);
+      height: 480px;
+      background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.22) 0%, rgba(99, 102, 241, 0.12) 40%, transparent 70%);
+      filter: blur(70px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .spotlight-leaks {
+      position: absolute;
+      top: 680px;
+      left: 5%;
+      width: clamp(280px, 70vw, 560px);
+      height: 460px;
+      background: radial-gradient(circle, rgba(239, 68, 68, 0.12) 0%, transparent 65%);
+      filter: blur(75px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .spotlight-fixes {
+      position: absolute;
+      top: 1300px;
+      right: 5%;
+      width: clamp(280px, 70vw, 600px);
+      height: 480px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 65%);
+      filter: blur(75px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .spotlight-bottom {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: clamp(320px, 85vw, 760px);
+      height: 360px;
+      background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.18) 0%, rgba(139, 92, 246, 0.1) 45%, transparent 70%);
+      filter: blur(65px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 clamp(16px, 4vw, 24px);
+      position: relative;
+      z-index: 1;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 96px;
+    }
+
+    /* Scroll-triggered Fade In Up Animation */
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .fade-in-up.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fade-in-up {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* Elevated Sticky Top Header Island (10px taller with larger typography) */
+    .site-header {
+      position: sticky;
+      top: 14px;
+      z-index: 100;
+      padding: 17px clamp(16px, 2.5vw, 24px);
+      background: rgba(13, 20, 36, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: all 0.2s ease;
+      margin-top: 12px;
+      margin-bottom: 12px;
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Left: Info Box (Company Info, No border, No bg) */
+    .info-box {
+      display: inline-flex;
+      align-items: center;
+      padding: 0;
+      background: transparent;
+      border: none;
+    }
+
+    .company-name {
+      font-size: clamp(0.96rem, 2.4vw, 1.08rem);
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      color: #FFFFFF;
+      white-space: nowrap;
+    }
+
+    /* Navigation Menu (Issues -> Fixes) - Larger Typography */
+    .header-menu {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .menu-item {
+      color: #94A3B8;
+      font-size: clamp(0.92rem, 2.2vw, 0.98rem);
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .menu-item:hover {
+      color: #FFFFFF;
+    }
+
+    .menu-arrow {
+      color: #64748B;
+      font-size: 0.96rem;
+      user-select: none;
+    }
+
+    /* Hero Section (Centered, Light Effect) */
+    .hero {
+      padding: clamp(48px, 9vw, 76px) 0 clamp(24px, 5vw, 36px) 0;
+      text-align: center;
+    }
+
+    .hero-heading {
+      font-size: clamp(1.95rem, 5.5vw, 2.95rem);
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.025em;
+      color: #FFFFFF;
+      max-width: 900px;
+      margin: 0 auto;
+      text-wrap: balance;
+    }
+
+    .hero-desc {
+      font-size: clamp(1.02rem, 2.2vw, 1.15rem);
+      color: #E2E8F0;
+      line-height: 1.75;
+      max-width: 860px;
+      margin: 20px auto 0 auto;
+      font-weight: 400;
+      letter-spacing: -0.005em;
+    }
+
+    .company-highlight {
+      background: linear-gradient(135deg, #FFFFFF 10%, #93C5FD 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Consistent Section Spacing & Rhythm */
+    .audit-section {
+      margin-bottom: clamp(64px, 8vw, 92px);
+      width: 100%;
+      text-align: left;
+    }
+
+    /* Google Insights Cards (Elevated, Sleek Dashboard Look) */
+    .speed-section-wrap {
+      margin-top: clamp(16px, 3vw, 24px);
+      margin-bottom: clamp(64px, 8vw, 92px);
+    }
+
+    .speed-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(12px, 2.5vw, 18px);
+      margin-bottom: 22px;
+    }
+
+    .speed-card {
+      position: relative;
+      background: linear-gradient(180deg, rgba(20, 28, 48, 0.7) 0%, rgba(10, 15, 28, 0.85) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: clamp(20px, 3.2vw, 26px) clamp(16px, 2.8vw, 22px);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .speed-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(99, 102, 241, 0.35);
+      box-shadow: 0 22px 48px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .speed-value {
+      font-size: clamp(2rem, 4.5vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: -0.03em;
+      text-align: center;
+    }
+
+    .speed-unit {
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      font-weight: 500;
+      color: #94A3B8;
+      margin-left: 2px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .val-crimson {
+      color: #F87171;
+      text-shadow: 0 0 24px rgba(239, 68, 68, 0.25);
+    }
+
+    .val-amber {
+      color: #FBBF24;
+      text-shadow: 0 0 24px rgba(245, 158, 11, 0.25);
+    }
+
+    .val-emerald {
+      color: #34D399;
+      text-shadow: 0 0 24px rgba(16, 185, 129, 0.25);
+    }
+
+    .speed-label {
+      font-size: clamp(0.84rem, 2vw, 0.92rem);
+      font-weight: 500;
+      color: #94A3B8;
+      letter-spacing: -0.01em;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .speed-benchmark {
+      font-size: clamp(0.68rem, 1.6vw, 0.74rem);
+      color: #64748B;
+      margin-top: 1px;
+      line-height: 1.25;
+      text-align: center;
+      letter-spacing: 0.01em;
+    }
+
+    .speed-benchmark em {
+      font-style: italic;
+      color: #94A3B8;
+      font-weight: 500;
+    }
+
+    /* Descriptions relocated after the boxes */
+    .speed-notes-wrap {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px 28px;
+      margin-top: 18px;
+      margin-bottom: 22px;
+      text-align: left;
+    }
+
+    .speed-note-item {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      font-size: clamp(0.88rem, 2.2vw, 0.96rem);
+      color: #E2E8F0;
+      line-height: 1.6;
+    }
+
+    .speed-note-dash {
+      color: #60A5FA;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .speed-footer-link {
+      text-align: center;
+      margin-top: 18px;
+    }
+
+    .pagespeed-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 20px;
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.22);
+      border-radius: 9999px;
+      color: #60A5FA;
+      font-size: clamp(0.82rem, 2.2vw, 0.88rem);
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .pagespeed-link:hover {
+      background: rgba(59, 130, 246, 0.16);
+      border-color: rgba(59, 130, 246, 0.45);
+      color: #93C5FD;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
+    }
+
+    /* Left-Aligned Section Headings with High Readability and Visual Anchor (No uppercase) */
+    .section-heading {
+      text-align: left;
+      font-size: clamp(1.35rem, 3.6vw, 1.75rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #FFFFFF;
+      margin-bottom: clamp(18px, 3.5vw, 24px);
+      line-height: 1.35;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .heading-pill {
+      display: inline-block;
+      width: 4px;
+      height: 22px;
+      background: linear-gradient(180deg, #3B82F6 0%, #60A5FA 100%);
+      border-radius: 999px;
+      flex-shrink: 0;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    }
+
+    .heading-pill-green {
+      background: linear-gradient(180deg, #10B981 0%, #34D399 100%);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+
+    /* Aligned 1-to-1 Row Flow Layout (Left vs Right with Arrow in between) */
+    .flow-container {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(16px, 3.5vw, 22px);
+      margin-bottom: 0;
+    }
+
+    .flow-row {
+      display: grid;
+      grid-template-columns: 1fr 40px 1fr;
+      align-items: flex-start;
+      gap: clamp(12px, 3vw, 20px);
+    }
+
+    .flow-col-header-row {
+      display: grid;
+      grid-template-columns: 1fr 40px 1fr;
+      align-items: center;
+      gap: clamp(12px, 3vw, 20px);
+      margin-bottom: 4px;
+    }
+
+    .flow-col-title {
+      font-size: clamp(0.76rem, 2vw, 0.82rem);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .col-title-leaks { color: #F87171; }
+    .col-title-consequences { color: #FBBF24; }
+    .col-title-fixes { color: #34D399; }
+    .col-title-results { color: #60A5FA; }
+
+    .bullet-item {
+      display: flex;
+      align-items: flex-start;
+      gap: clamp(10px, 2.5vw, 14px);
+    }
+
+    /* Round Shape Circle Icons with White Glyph */
+    .circle-icon-red {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #EF4444;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.76rem;
+      font-weight: 900;
+      flex-shrink: 0;
+      margin-top: 0;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.45);
+    }
+
+    .circle-icon-amber {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #D97706;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 0;
+      box-shadow: 0 0 14px rgba(217, 119, 6, 0.35);
+    }
+
+    .circle-icon-green {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #10B981;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.76rem;
+      font-weight: 900;
+      flex-shrink: 0;
+      margin-top: 0;
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.45);
+    }
+
+    .circle-icon-blue {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #2563EB;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.76rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 0;
+      box-shadow: 0 0 14px rgba(37, 99, 235, 0.45);
+    }
+
+    .bullet-content h4 {
+      font-size: clamp(0.92rem, 2.3vw, 1.02rem);
+      font-weight: 600;
+      color: #FFFFFF;
+      line-height: 1.3;
+      margin-bottom: 3px;
+    }
+
+    .bullet-content p {
+      font-size: clamp(0.78rem, 1.8vw, 0.84rem);
+      color: #94A3B8;
+      line-height: 1.45;
+      font-weight: 400;
+    }
+
+    .flow-arrow {
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      font-size: 1.25rem;
+      line-height: 1;
+      opacity: 0.7;
+    }
+
+    /* Concept Preview Mockup & Outcomes */
+    .concept-preview-wrap {
+      margin-bottom: clamp(64px, 8vw, 92px);
+      text-align: left;
+      width: 100%;
+    }
+
+    .mockup-frame {
+      background: rgba(14, 20, 36, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), 0 0 40px rgba(37, 99, 235, 0.15);
+      position: relative;
+      margin-bottom: clamp(32px, 5vw, 44px);
+      text-align: left;
+    }
+
+    .mockup-viewport {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      background: #0B0F19;
+      display: block;
+    }
+
+    .mockup-img {
+      width: 100%;
+      height: clamp(280px, 48vw, 460px);
+      object-fit: cover;
+      display: block;
+      border: 0;
+      filter: blur(8px) brightness(0.68);
+      transform: scale(1.05);
+      transition: filter 0.3s ease;
+    }
+
+    .mockup-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle, rgba(7, 9, 14, 0.3) 0%, rgba(7, 9, 14, 0.75) 100%);
+      z-index: 5;
+      padding: 16px;
+    }
+
+    .mockup-cta-btn {
+      background: #2563EB;
+      color: #FFFFFF;
+      font-size: clamp(0.92rem, 2.3vw, 1.1rem);
+      font-weight: 700;
+      padding: clamp(14px, 3vw, 18px) clamp(22px, 5vw, 34px);
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 0 35px rgba(37, 99, 235, 0.7), 0 10px 24px rgba(0, 0, 0, 0.5);
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      letter-spacing: -0.01em;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    .mockup-cta-btn:hover {
+      background: #1D4ED8;
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 0 45px rgba(37, 99, 235, 0.9), 0 14px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .mockup-topbar {
+      background: rgba(10, 15, 28, 0.95);
+      padding: clamp(10px, 2.5vw, 12px) clamp(12px, 3vw, 18px);
+      display: grid;
+      grid-template-columns: 70px 1fr 70px;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .mockup-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .mockup-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+
+    .dot-r { background: #EF4444; opacity: 0.7; }
+    .dot-y { background: #F59E0B; opacity: 0.7; }
+    .dot-g { background: #10B981; opacity: 0.7; }
+
+    .mockup-url {
+      font-size: clamp(0.68rem, 2vw, 0.76rem);
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-dim);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px 14px;
+      border-radius: 6px;
+      justify-self: center;
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mockup-topbar-right {
+      /* Balances left dots so searchbar is dead center */
+    }
+
+    /* Expected Outcomes (6 Bullets, Simple Text) */
+    .outcomes-wrap {
+      margin-top: 0;
+      margin-bottom: clamp(36px, 6vw, 48px);
+    }
+
+    .outcomes-grid-6 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px clamp(16px, 3.5vw, 32px);
+      text-align: left;
+    }
+
+    .outcome-bullet {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: clamp(0.92rem, 2.3vw, 1.02rem);
+      color: #F8FAFC;
+      line-height: 1.55;
+    }
+
+    .bullet-check {
+      color: #10B981;
+      font-weight: 900;
+      font-size: 1.05rem;
+      line-height: 1.35;
+      flex-shrink: 0;
+    }
+
+    /* Transition & Reflection Section (Left-aligned, No Borders) */
+    .transition-section {
+      text-align: left;
+      padding: 0;
+      margin-bottom: clamp(64px, 8vw, 92px);
+      width: 100%;
+    }
+
+    .questions-wrap {
+      max-width: 100%;
+      margin: 0;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .question-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: clamp(0.94rem, 2.4vw, 1.04rem);
+      color: #F8FAFC;
+      line-height: 1.6;
+    }
+
+    .question-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      color: #93C5FD;
+      font-size: 0.76rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Clean CTA Buttons */
+    .cta-row {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: #2563EB;
+      color: #FFFFFF;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 10px;
+      text-decoration: none;
+      box-shadow: 0 0 28px rgba(37, 99, 235, 0.45);
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-primary:hover {
+      background: #1D4ED8;
+      transform: translateY(-2px);
+      box-shadow: 0 0 36px rgba(37, 99, 235, 0.65);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: #FFFFFF;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 14px 26px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: translateY(-2px);
+    }
+
+    /* Fully responsive media queries for all device classes */
+    @media (max-width: 860px) {
+      .speed-grid { grid-template-columns: repeat(2, 1fr); }
+      .flow-col-header-row { display: none; }
+      .flow-row {
+        position: relative;
+        grid-template-columns: 1fr;
+        gap: 14px;
+        margin-bottom: 24px;
+        padding-bottom: 0;
+        border-bottom: none;
+      }
+      .flow-row:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+      .flow-arrow {
+        position: absolute;
+        top: 30px;
+        left: 0;
+        width: 26px;
+        height: 20px;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: rotate(90deg);
+        color: #94A3B8;
+        font-size: 0.95rem;
+        line-height: 1;
+        opacity: 0.75;
+        pointer-events: none;
+      }
+      .outcomes-grid-6 { grid-template-columns: 1fr; gap: 12px; }
+    }
+
+    @media (max-width: 680px) {
+      .header-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+      .header-menu {
+        order: 2;
+        width: auto;
+        justify-content: flex-end;
+        padding: 0;
+      }
+      .menu-item {
+        flex: initial;
+        text-align: right;
+        padding: 0;
+      }
+    }
+
+    @media (max-width: 580px) {
+      .speed-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .speed-notes-wrap { grid-template-columns: 1fr; gap: 8px; }
+      .mockup-topbar { grid-template-columns: 45px 1fr 45px; padding: 8px 10px; }
+      .cta-row { flex-direction: column; width: 100%; }
+      .btn-primary, .btn-secondary { width: 100%; text-align: center; }
+    }
+
+    @media (max-width: 360px) {
+      .speed-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Light Effects -->
+  <div class="spotlight-top"></div>
+  <div class="spotlight-leaks"></div>
+  <div class="spotlight-fixes"></div>
+  <div class="spotlight-bottom"></div>
+
+  <div class="container">
+
+    <!-- Minimal Header: Company Name & Menu (Issues -> Fixes) Aligned Left -->
+    <header class="site-header">
+      <div class="header-inner">
+        <!-- Audit Name (Clean typography, no border, no bg) -->
+        <div class="info-box">
+          <span class="company-name">Vista Plumbing</span>
+        </div>
+
+        <!-- Menu: Issues -> Fixes (Left Aligned) -->
+        <nav class="header-menu">
+          <a href="#issues" class="menu-item">Issues</a>
+          <span class="menu-arrow">&rarr;</span>
+          <a href="#fixes" class="menu-item">Fixes</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Center Aligned Hero with Light Effect -->
+    <section class="hero">
+      <h1 class="hero-heading">
+        We ran an in-depth audit on <span class="company-highlight">Vista Plumbing</span> and here is what we came up with.
+      </h1>
+      <p class="hero-desc">
+        We ran a PageSpeed audit on <u>vistaplumbingco.com</u>. Mobile scores <span class='text-warn-highlight'>38/100</span>, and the hero takes <strong>6.8 seconds</strong> to load. <em>Most emergency callers on phones won’t wait that long.</em> We built a <span class='text-highlight'>fast concept version</span> so you can see the difference.
+      </p>
+    </section>
+
+    <!-- Google Insights Results (Clean Cards + Relocated Descriptions) -->
+    <section class="speed-section-wrap">
+      <div class="speed-grid">
+        
+        <div class="speed-card">
+          <div class="speed-value val-crimson">38<span class="speed-unit">/100</span></div>
+          <div class="speed-label">Mobile speed score</div>
+          <div class="speed-benchmark"><em>usual: 90+</em></div>
+        </div>
+
+        <div class="speed-card">
+          <div class="speed-value val-amber">2.4<span class="speed-unit">s</span></div>
+          <div class="speed-label">First contentful paint</div>
+          <div class="speed-benchmark"><em>usual: &lt; 1.8s</em></div>
+        </div>
+
+        <div class="speed-card">
+          <div class="speed-value val-crimson">6.8<span class="speed-unit">s</span></div>
+          <div class="speed-label">Largest contentful paint</div>
+          <div class="speed-benchmark"><em>usual: &lt; 2.5s</em></div>
+        </div>
+
+        <div class="speed-card">
+          <div class="speed-value val-crimson">4,200<span class="speed-unit">ms</span></div>
+          <div class="speed-label">Total blocking time</div>
+          <div class="speed-benchmark"><em>usual: &lt; 200ms</em></div>
+        </div>
+
+      </div>
+
+      <!-- Link text after boxes -->
+      <div class="speed-footer-link" style="margin-top: 26px;">
+        <a href="https://pagespeed.web.dev/analysis?url=https://www.vistaplumbingco.com" target="_blank" rel="noopener noreferrer" class="pagespeed-link">
+          See live audit in Google PageSpeed Insights &rarr;
+        </a>
+      </div>
+    </section>
+
+    <!-- Section 1: Leaks & Consequences (1-to-1 Aligned with Arrow in between, No Outer Borders) -->
+    <section class="audit-section" id="issues">
+      <h2 class="section-heading"><span class="heading-pill"></span> Also, we found these critical leaks</h2>
+
+      <div class="flow-container">
+      
+      <!-- Column Headers -->
+      <div class="flow-col-header-row">
+        <div class="flow-col-title col-title-leaks">Identified leaks</div>
+        <div></div>
+        <div class="flow-col-title col-title-consequences">Direct consequences</div>
+      </div>
+
+      <!-- Row 1 -->
+      <div class="flow-row">
+        <div class="bullet-item">
+          <div class="circle-icon-red">&#10005;</div>
+          <div class="bullet-content">
+            <h4>Unoptimized WordPress asset bloat</h4>
+            <p>Heavy WordPress scripts choke mobile speeds.</p>
+          </div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="bullet-item">
+          <div class="circle-icon-amber">&#9888;</div>
+          <div class="bullet-content">
+            <h4>High central Oregon bounce rate</h4>
+            <p>Bend homeowners abandon slow mobile pages.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="flow-row">
+        <div class="bullet-item">
+          <div class="circle-icon-red">&#10005;</div>
+          <div class="bullet-content">
+            <h4>Dead universal analytics tag</h4>
+            <p>Dead code wastes precious mobile bandwidth.</p>
+          </div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="bullet-item">
+          <div class="circle-icon-amber">&#9888;</div>
+          <div class="bullet-content">
+            <h4>Zero modern event tracking</h4>
+            <p>No conversion data on emergency calls.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 3 -->
+      <div class="flow-row">
+        <div class="bullet-item">
+          <div class="circle-icon-red">&#10005;</div>
+          <div class="bullet-content">
+            <h4>Weak h1 hero headline</h4>
+            <p>Generic hook causes instant visitor shopping.</p>
+          </div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="bullet-item">
+          <div class="circle-icon-amber">&#9888;</div>
+          <div class="bullet-content">
+            <h4>Trust erosion against rivals</h4>
+            <p>Homeowners choose competitors with clear guarantees.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 4 -->
+      <div class="flow-row">
+        <div class="bullet-item">
+          <div class="circle-icon-red">&#10005;</div>
+          <div class="bullet-content">
+            <h4>No sticky phone dialer</h4>
+            <p>Callers must hunt for dispatch numbers.</p>
+          </div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="bullet-item">
+          <div class="circle-icon-amber">&#9888;</div>
+          <div class="bullet-content">
+            <h4>Lost urgent emergency jobs</h4>
+            <p>High-ticket pipe repair calls get lost.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 5 -->
+      <div class="flow-row">
+        <div class="bullet-item">
+          <div class="circle-icon-red">&#10005;</div>
+          <div class="bullet-content">
+            <h4>Missing instant quote funnel</h4>
+            <p>Researching visitors skip long contact forms.</p>
+          </div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="bullet-item">
+          <div class="circle-icon-amber">&#9888;</div>
+          <div class="bullet-content">
+            <h4>Uncaptured high-ticket leaks</h4>
+            <p>Water heater shoppers leave without trace.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: How We Fix It (1-to-1 Aligned with Arrow in between, No Outer Borders) -->
+    <section class="audit-section" id="fixes">
+      <h2 class="section-heading"><span class="heading-pill heading-pill-green"></span> How we fix it</h2>
+
+      <div class="flow-container">
+      
+      <!-- Column Headers -->
+      <div class="flow-col-header-row">
+        <div class="flow-col-title col-title-fixes">Architectural fixes</div>
+        <div></div>
+        <div class="flow-col-title col-title-results">Expected results</div>
+      </div>
+
+      <!-- Row 1 -->
+      <div class="flow-row">
+        <div class="bullet-item">
+          <div class="circle-icon-green">&#10003;</div>
+          <div class="bullet-content">
+            <h4>Pre-rendered edge cdn architecture</h4>
+            <p>Clean static assets on ultra-fast networks.</p>
+          </div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="bullet-item">
+          <div class="circle-icon-blue">&#9733;</div>
+          <div class="bullet-content">
+            <h4>95+ mobile pagespeed score</h4>
+            <p>Instant loads boost local Google rankings.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="flow-row">
+        <div class="bullet-item">
+          <div class="circle-icon-green">&#10003;</div>
+          <div class="bullet-content">
+            <h4>Clean ga4 telemetry pipeline</h4>
+            <p>Tracks every tap and incoming call.</p>
+          </div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="bullet-item">
+          <div class="circle-icon-blue">&#9733;</div>
+          <div class="bullet-content">
+            <h4>Accurate lead roi visibility</h4>
+            <p>Pinpoints your highest-margin local jobs.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 3 -->
+      <div class="flow-row">
+        <div class="bullet-item">
+          <div class="circle-icon-green">&#10003;</div>
+          <div class="bullet-content">
+            <h4>Hero ccb license badges</h4>
+            <p>Showcases verified credentials above the fold.</p>
+          </div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="bullet-item">
+          <div class="circle-icon-blue">&#9733;</div>
+          <div class="bullet-content">
+            <h4>Premium dispatch rate authority</h4>
+            <p>Instant trust commands higher service rates.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 4 -->
+      <div class="flow-row">
+        <div class="bullet-item">
+          <div class="circle-icon-green">&#10003;</div>
+          <div class="bullet-content">
+            <h4>Sticky mobile bottom dialer</h4>
+            <p>One-tap call bar anchors to phones.</p>
+          </div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="bullet-item">
+          <div class="circle-icon-blue">&#9733;</div>
+          <div class="bullet-content">
+            <h4>45% mobile call increase</h4>
+            <p>Eliminates friction on emergency repair calls.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 5 -->
+      <div class="flow-row">
+        <div class="bullet-item">
+          <div class="circle-icon-green">&#10003;</div>
+          <div class="bullet-content">
+            <h4>20-second instant quote widget</h4>
+            <p>Captures quotes and sends instant alerts.</p>
+          </div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="bullet-item">
+          <div class="circle-icon-blue">&#9733;</div>
+          <div class="bullet-content">
+            <h4>Triple captured lead volume</h4>
+            <p>Converts shoppers not ready to call.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Transition & Reflection Questions -->
+    <section class="audit-section transition-section">
+      <h3 class="section-heading">
+        <span class="heading-pill"></span> Important questions for your business
+      </h3>
+
+      <div class="questions-wrap">
+        <div class="question-row">
+          <span class="question-num">1</span>
+          <span>How many emergency Bend plumbing calls slip away without a mobile dialer?</span>
+        </div>
+        <div class="question-row">
+          <span class="question-num">2</span>
+          <span>Does an outdated WordPress layout reflect your quality in Central Oregon?</span>
+        </div>
+        <div class="question-row">
+          <span class="question-num">3</span>
+          <span>Are you capturing Bend homeowners shopping remodels who aren't ready to call?</span>
+        </div>
+        <div class="question-row">
+          <span class="question-num">4</span>
+          <span>Did you know bloated legacy plugins actively penalize your Google mobile rank?</span>
+        </div>
+        <div class="question-row">
+          <span class="question-num">5</span>
+          <span>What would <strong>15 to 25 extra high-ticket commercial jobs</strong> mean monthly?</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Fresh Redesigned Website Concept & Outcomes (Image Box After Question Box) -->
+    <section class="audit-section concept-preview-wrap" id="freebies">
+      <h2 class="section-heading" style="max-width: 900px; line-height: 1.35;">
+        <span class="heading-pill"></span> Fresh redesigned website concept
+      </h2>
+
+      <!-- Browser Mockup Image Frame with Blur Effect & Button -->
+      <div class="mockup-frame">
+        <div class="mockup-topbar">
+          <div class="mockup-dots">
+            <span class="mockup-dot dot-r"></span>
+            <span class="mockup-dot dot-y"></span>
+            <span class="mockup-dot dot-g"></span>
+          </div>
+          <div class="mockup-url">vistaplumbingco.com &bull; fresh prototype preview</div>
+          <div class="mockup-topbar-right"></div>
+        </div>
+        <div class="mockup-viewport">
+          <img src="concept-preview.jpg" alt="Fresh high-converting website concept preview for Vista Plumbing" class="mockup-img">
+          <div class="mockup-overlay">
+            <a href="https://cal.com/inkash-n5ihxh/30min" target="_blank" rel="noopener noreferrer" class="mockup-cta-btn">
+              Book a 5 minute call to get it &rarr;
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Expected Outcomes Section (6 Bullets, Simple Text) -->
+      <div class="outcomes-wrap">
+        <h3 class="section-heading" style="margin-bottom: 20px;">
+          <span class="heading-pill heading-pill-green"></span> Expected outcomes
+        </h3>
+
+        <div class="outcomes-grid-6">
+          <div class="outcome-bullet">
+            <span class="bullet-check">&#10003;</span>
+            <span class="outcome-text">Ranked in <strong>Google AI Overviews</strong> and Bend searches.</span>
+          </div>
+          <div class="outcome-bullet">
+            <span class="bullet-check">&#10003;</span>
+            <span class="outcome-text">Sticky 1-tap mobile dialer <em>captures urgent callers instantly</em>.</span>
+          </div>
+          <div class="outcome-bullet">
+            <span class="bullet-check">&#10003;</span>
+            <span class="outcome-text">20-second instant estimate tool converts <u>remodel leads</u>.</span>
+          </div>
+          <div class="outcome-bullet">
+            <span class="bullet-check">&#10003;</span>
+            <span class="outcome-text">Sub-second <span class='text-highlight'>0.8s load times</span> hitting green <strong>95+ speed</strong>.</span>
+          </div>
+          <div class="outcome-bullet">
+            <span class="bullet-check">&#10003;</span>
+            <span class="outcome-text">Verified CCB license & trust badges <em>above the fold</em>.</span>
+          </div>
+          <div class="outcome-bullet">
+            <span class="bullet-check">&#10003;</span>
+            <span class="outcome-text">Zero WordPress plugin bloat or <u>layout jumps</u> on phones.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clean Action Buttons (No borders) -->
+      <div class="cta-row" style="margin-top: 48px;">
+        <a href="https://cal.com/inkash-n5ihxh/30min" target="_blank" rel="noopener noreferrer" class="btn-primary">
+          Book a 5 minute call to get it &rarr;
+        </a>
+        <a href="mailto:emad@inkash.agency?subject=Vista Plumbing%20Website%20Audit" class="btn-secondary">
+          Reply via email directly
+        </a>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Real-time Telegram Alert & Visit Tracking (Zero Spam/Deliverability Penalty) -->
+  <script>
+    (function() {
+      var clientName = "Vista Plumbing";
+      var clientSlug = "vista";
+      var auditSendNumber = "Audit #2";
+      var sessionStartTime = Date.now();
+      var arrivalDate = new Date();
+      var arrivalTimeFormatted = arrivalDate.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
+      });
+      var visitDateFormatted = arrivalDate.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      });
+
+      // Store initial visit time immediately on landing
+      try {
+        localStorage.setItem("inkash_visit_start_" + clientSlug, sessionStartTime.toString());
+        localStorage.setItem("inkash_arrival_" + clientSlug, arrivalTimeFormatted + " (" + visitDateFormatted + ")");
+      } catch(e) {}
+
+      var BOT_TOKEN = "9134859977:AAEMRjZWRfJv8MJOQkh4ya7f5U9cf1Y9JpU";
+      var CHAT_ID = "6646335562";
+
+      var cachedGeo = null;
+      var maxScrollPercent = 10;
+      var hasSentExit = false;
+
+      // Prefetch IP and geolocation immediately in background so it's ready before exit
+      try {
+        var savedGeo = localStorage.getItem("inkash_geo_" + clientSlug);
+        if (savedGeo) {
+          cachedGeo = JSON.parse(savedGeo);
+        }
+      } catch(e) {}
+
+      fetch("https://ipwho.is/")
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data && data.ip) {
+            cachedGeo = data;
+            try {
+              localStorage.setItem("inkash_geo_" + clientSlug, JSON.stringify(data));
+            } catch(e) {}
+          }
+        })
+        .catch(function() {});
+
+      function getDeviceInfo() {
+        var isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
+        return isMobile ? "📱 Smartphone (Mobile)" : "💻 Desktop / Laptop";
+      }
+
+      function getGeoDetails(geo) {
+        var g = geo || cachedGeo;
+        var ip = (g && g.ip) ? g.ip : "Detecting...";
+        var locParts = [];
+        if (g && g.city) locParts.push(g.city);
+        if (g && g.region) locParts.push(g.region);
+        if (g && g.country) locParts.push(g.country);
+        var loc = locParts.length > 0 ? locParts.join(", ") : "Detecting...";
+        var isp = (g && g.connection && g.connection.isp) ? (" (" + g.connection.isp + ")") : "";
+        return { ip: ip, loc: loc, isp: isp };
+      }
+
+      // Robust exit dispatcher (Sends strictly once via Beacon -> Fetch Keepalive -> GET Beacon)
+      function postTelegramReliable(text) {
+        var baseEndpoint = "https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage";
+        var queryUrl = baseEndpoint + "?chat_id=" + encodeURIComponent(CHAT_ID) + "&text=" + encodeURIComponent(text);
+
+        // 1. FormData Beacon (W3C standard for unload/visibilitychange; returns true if queued)
+        if (navigator.sendBeacon) {
+          try {
+            var fd = new FormData();
+            fd.append("chat_id", CHAT_ID);
+            fd.append("text", text);
+            if (navigator.sendBeacon(baseEndpoint, fd)) {
+              return;
+            }
+          } catch(e) {}
+        }
+
+        // 2. Fetch fallback with keepalive: true (keeps request alive after page close)
+        if (window.fetch) {
+          try {
+            var fd2 = new FormData();
+            fd2.append("chat_id", CHAT_ID);
+            fd2.append("text", text);
+            fetch(baseEndpoint, {
+              method: "POST",
+              body: fd2,
+              keepalive: true,
+              mode: "no-cors"
+            }).catch(function() {});
+            return;
+          } catch(e) {}
+        }
+
+        // 3. Fallback Instant Image GET Tracking Beacon (No CORS preflight)
+        try {
+          var beaconImg = new Image();
+          beaconImg.src = queryUrl;
+        } catch(e) {}
+      }
+
+      // Accurate Scroll Depth Calculator
+      function updateScrollDepth() {
+        try {
+          var scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+          var winHeight = window.innerHeight || document.documentElement.clientHeight || 800;
+          var docHeight = Math.max(
+            document.body.scrollHeight || 0,
+            document.documentElement.scrollHeight || 0,
+            document.body.offsetHeight || 0,
+            document.documentElement.offsetHeight || 0
+          );
+          if (docHeight > 0) {
+            var viewedPx = scrollY + winHeight;
+            var pct = Math.min(100, Math.max(10, Math.round((viewedPx / docHeight) * 100)));
+            if (pct > maxScrollPercent) {
+              maxScrollPercent = pct;
+              try {
+                localStorage.setItem("inkash_scroll_depth_" + clientSlug, maxScrollPercent + "%");
+              } catch(e) {}
+            }
+          }
+        } catch(e) {}
+      }
+
+      window.addEventListener("scroll", updateScrollDepth, { passive: true });
+      window.addEventListener("resize", updateScrollDepth, { passive: true });
+      document.addEventListener("DOMContentLoaded", updateScrollDepth);
+      setTimeout(updateScrollDepth, 600);
+
+      // Handle Exit: Send the update ONLY ONCE when user leaves
+      function handleExit() {
+        // Enforce strict one-time execution per session
+        if (hasSentExit) return;
+        var alreadySent = sessionStorage.getItem("inkash_exit_sent_" + clientSlug);
+        if (alreadySent === "true") return;
+
+        hasSentExit = true;
+        try {
+          sessionStorage.setItem("inkash_exit_sent_" + clientSlug, "true");
+        } catch(e) {}
+
+        updateScrollDepth();
+
+        var durationMs = Date.now() - sessionStartTime;
+        var totalSeconds = Math.max(1, Math.round(durationMs / 1000));
+        var min = Math.floor(totalSeconds / 60);
+        var remSec = totalSeconds % 60;
+        var durationStr = min > 0
+          ? (min + " min " + remSec + " sec (" + totalSeconds + "s total)")
+          : (totalSeconds + " seconds");
+
+        var leavingTimeFormatted = new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true
+        });
+
+        // Before leaving, store the visit time and metrics in storage
+        try {
+          localStorage.setItem("inkash_visit_time_" + clientSlug, arrivalTimeFormatted + " (" + visitDateFormatted + ")");
+          localStorage.setItem("inkash_leaving_time_" + clientSlug, leavingTimeFormatted);
+          localStorage.setItem("inkash_duration_" + clientSlug, durationStr);
+          localStorage.setItem("inkash_seconds_spent_" + clientSlug, totalSeconds.toString());
+          localStorage.setItem("inkash_scroll_depth_" + clientSlug, maxScrollPercent + "%");
+        } catch(e) {}
+
+        var geoInfo = getGeoDetails(cachedGeo);
+        var deviceText = getDeviceInfo();
+
+        var exitLines = [
+          "🚪 [Lead Left Website] " + clientName + " (" + auditSendNumber + ")",
+          "",
+          "🏢 Lead: " + clientName,
+          "⏱️ Time on Website: " + durationStr,
+          "📜 Page Scrolled: " + maxScrollPercent + "% of total page viewed",
+          "🌐 IP Address: " + geoInfo.ip,
+          "📍 Location: " + geoInfo.loc + geoInfo.isp,
+          "📱 Device: " + deviceText,
+          "⏰ Visit Time: Landed at " + arrivalTimeFormatted + " | Left at " + leavingTimeFormatted,
+          "🔗 Page: " + window.location.href,
+          "",
+          "👉 Summary: Prospect spent " + durationStr + " on the site and scrolled through " + maxScrollPercent + "% of the audit."
+        ];
+
+        var exitMessage = exitLines.join(String.fromCharCode(10));
+        postTelegramReliable(exitMessage);
+      }
+
+      // Bind departure events so exit fires reliably when user leaves
+      window.addEventListener("pagehide", handleExit);
+      window.addEventListener("beforeunload", handleExit);
+      window.addEventListener("unload", handleExit);
+      document.addEventListener("visibilitychange", function() {
+        if (document.visibilityState === "hidden") {
+          handleExit();
+        }
+      });
+
+      // Optional CTA Click tracking (Reliable Beacon)
+      document.addEventListener("DOMContentLoaded", function() {
+        var ctaButtons = document.querySelectorAll('a[href*="cal.com"]');
+        ctaButtons.forEach(function(btn) {
+          btn.addEventListener("click", function() {
+            var geoInfo = getGeoDetails(cachedGeo);
+            var ctaLines = [
+              "🎯 [CTA Click] " + clientName + " (" + auditSendNumber + ")",
+              "🏢 Lead: " + clientName,
+              "🔘 Clicked: " + (btn.innerText || "Book Call").replace(/[^a-zA-Z0-9 ]/g, '').trim(),
+              "🌐 IP: " + geoInfo.ip,
+              "📍 Location: " + geoInfo.loc + geoInfo.isp
+            ];
+            postTelegramReliable(ctaLines.join(String.fromCharCode(10)));
+          });
+        });
+
+        // Smooth Scroll-Triggered Fade In Up Animations
+        var animSelectors = [
+          ".hero-heading",
+          ".hero-desc",
+          ".speed-card",
+          ".section-heading",
+          ".flow-row",
+          ".mockup-frame",
+          ".outcomes-wrap",
+          ".outcome-bullet",
+          ".question-row",
+          ".cta-row"
+        ];
+
+        var animElements = document.querySelectorAll(animSelectors.join(", "));
+        animElements.forEach(function(el) {
+          el.classList.add("fade-in-up");
+        });
+
+        if ("IntersectionObserver" in window) {
+          var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                observer.unobserve(entry.target);
+              }
+            });
+          }, {
+            rootMargin: "0px 0px -40px 0px",
+            threshold: 0.05
+          });
+
+          animElements.forEach(function(el) {
+            observer.observe(el);
+          });
+        } else {
+          animElements.forEach(function(el) {
+            el.classList.add("is-visible");
+          });
+        }
+
+        // Slow, Luxurious Custom Smooth Scroll Animation (easeInOutCubic)
+        function slowSmoothScrollTo(targetY, duration) {
+          var startY = window.pageYOffset || document.documentElement.scrollTop;
+          var diff = targetY - startY;
+          if (Math.abs(diff) < 2) return;
+          var startTime = null;
+
+          function easeInOutCubic(t) {
+            return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+          }
+
+          function step(currentTime) {
+            if (!startTime) startTime = currentTime;
+            var elapsed = currentTime - startTime;
+            var progress = Math.min(elapsed / duration, 1);
+            var ease = easeInOutCubic(progress);
+            window.scrollTo(0, Math.round(startY + diff * ease));
+
+            if (progress < 1) {
+              window.requestAnimationFrame(step);
+            }
+          }
+
+          window.requestAnimationFrame(step);
+        }
+
+        // Smooth Anchor Scrolling with Sticky Header Offset & Slow Animation
+        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+          anchor.addEventListener("click", function(e) {
+            var targetId = this.getAttribute("href");
+            if (targetId && targetId !== "#") {
+              var targetEl = document.querySelector(targetId);
+              if (targetEl) {
+                e.preventDefault();
+                var headerOffset = 94;
+                var elementPosition = targetEl.getBoundingClientRect().top;
+                var targetPosition = elementPosition + (window.pageYOffset || document.documentElement.scrollTop) - headerOffset;
+                slowSmoothScrollTo(targetPosition, 950);
+              }
+            }
+          });
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

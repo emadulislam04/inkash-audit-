@@ -1,0 +1,2201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>A & S Heating & Cooling — Website Audit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #06080D;
+      --text: #F8FAFC;
+      --text-muted: #CBD5E1;
+      --text-dim: #94A3B8;
+      --crimson: #EF4444;
+      --emerald: #10B981;
+      --amber: #F59E0B;
+      --blue: #3B82F6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    body {
+      background-color: #070B16;
+      color: var(--text);
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: clamp(24px, 4vw, 40px);
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    /* Clean custom scrollbar for smooth single-scrollbar experience */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #06080D;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(59, 130, 246, 0.5);
+    }
+
+    /* Fixed GPU-composited atmospheric background for buttery smooth 60fps/120fps scrolling */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(at 15% 10%, rgba(37, 99, 235, 0.18) 0px, transparent 50%),
+        radial-gradient(at 85% 25%, rgba(139, 92, 246, 0.12) 0px, transparent 45%),
+        radial-gradient(at 10% 50%, rgba(239, 68, 68, 0.08) 0px, transparent 40%),
+        radial-gradient(at 85% 68%, rgba(16, 185, 129, 0.10) 0px, transparent 45%),
+        radial-gradient(at 50% 92%, rgba(59, 130, 246, 0.15) 0px, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+      transform: translateZ(0);
+      will-change: transform;
+    }
+
+    /* Tasteful typographic emphasis (Bold, Italic, Highlight, Underline) */
+    strong {
+      color: #FFFFFF;
+      font-weight: 700;
+    }
+
+    em {
+      font-style: italic;
+      color: #F1F5F9;
+    }
+
+    u {
+      text-decoration: underline;
+      text-decoration-color: rgba(96, 165, 250, 0.55);
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1.5px;
+    }
+
+    .text-highlight {
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 5px;
+      padding: 1px 7px;
+      color: #93C5FD;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .text-warn-highlight {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.28);
+      border-radius: 5px;
+      padding: 1px 7px;
+      color: #FCA5A5;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* Multi-layered Ambient Light & Gradient Effects */
+    .spotlight-top {
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: clamp(340px, 90vw, 920px);
+      height: 520px;
+      background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.26) 0%, rgba(99, 102, 241, 0.15) 45%, transparent 70%);
+      filter: blur(75px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .spotlight-leaks {
+      position: absolute;
+      top: 640px;
+      left: -5%;
+      width: clamp(300px, 60vw, 580px);
+      height: 480px;
+      background: radial-gradient(circle, rgba(239, 68, 68, 0.13) 0%, rgba(245, 158, 11, 0.06) 45%, transparent 68%);
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .spotlight-questions {
+      position: absolute;
+      top: 1350px;
+      right: -5%;
+      width: clamp(320px, 60vw, 620px);
+      height: 480px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.14) 0%, rgba(59, 130, 246, 0.08) 50%, transparent 70%);
+      filter: blur(85px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .spotlight-fixes {
+      position: absolute;
+      top: 1950px;
+      left: -5%;
+      width: clamp(320px, 60vw, 620px);
+      height: 500px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.14) 0%, rgba(6, 182, 212, 0.08) 45%, transparent 68%);
+      filter: blur(85px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .spotlight-prototype {
+      position: absolute;
+      top: 2750px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: clamp(340px, 85vw, 880px);
+      height: 520px;
+      background: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.22) 0%, rgba(124, 58, 237, 0.12) 45%, transparent 70%);
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .spotlight-bottom {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: clamp(320px, 85vw, 760px);
+      height: 320px;
+      background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.20) 0%, rgba(139, 92, 246, 0.12) 45%, transparent 70%);
+      filter: blur(70px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 clamp(16px, 4vw, 24px);
+      position: relative;
+      z-index: 1;
+    }
+
+    html {
+      scroll-padding-top: 86px;
+    }
+
+    /* Scroll-triggered Fade In Up Animation */
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .fade-in-up.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fade-in-up {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* Elevated Sticky Top Header Island (10px taller with larger typography) */
+    .site-header {
+      position: sticky;
+      top: 14px;
+      z-index: 100;
+      padding: 17px clamp(16px, 2.5vw, 24px);
+      background: rgba(13, 20, 36, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: all 0.2s ease;
+      margin-top: 12px;
+      margin-bottom: 12px;
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Left: Info Box (Company Info, No border, No bg) */
+    .info-box {
+      display: inline-flex;
+      align-items: center;
+      padding: 0;
+      background: transparent;
+      border: none;
+    }
+
+    .company-name {
+      font-size: clamp(0.96rem, 2.4vw, 1.08rem);
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      color: #FFFFFF;
+      white-space: nowrap;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .company-name:hover {
+      color: #60A5FA;
+    }
+
+    /* Navigation Menu (Issues -> Fixes) - Larger Typography */
+    .header-menu {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .menu-item {
+      color: #94A3B8;
+      font-size: clamp(0.92rem, 2.2vw, 0.98rem);
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .menu-item:hover {
+      color: #FFFFFF;
+    }
+
+    .menu-arrow {
+      color: #64748B;
+      font-size: 0.96rem;
+      user-select: none;
+    }
+
+    /* Hero Section (Centered, Light Effect) */
+    .hero {
+      padding: clamp(48px, 9vw, 76px) 0 clamp(24px, 5vw, 36px) 0;
+      text-align: center;
+    }
+
+    .hero-heading {
+      font-size: clamp(1.95rem, 5.2vw, 2.95rem);
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.025em;
+      color: #FFFFFF;
+      max-width: 920px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .hero-desc {
+      font-size: clamp(1.02rem, 2.2vw, 1.15rem);
+      color: #E2E8F0;
+      line-height: 1.75;
+      max-width: 920px;
+      width: 100%;
+      margin: 20px auto 0 auto;
+      font-weight: 400;
+      letter-spacing: -0.005em;
+    }
+
+    .company-highlight {
+      background: linear-gradient(135deg, #FFFFFF 10%, #93C5FD 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Consistent Section Spacing & Rhythm */
+    .audit-section {
+      margin-bottom: clamp(64px, 8vw, 92px);
+      width: 100%;
+      text-align: left;
+      scroll-margin-top: 86px;
+    }
+
+    .audit-section:last-of-type {
+      margin-bottom: 0;
+    }
+
+    /* Google Insights Cards (Elevated, Sleek Dashboard Look) */
+    .speed-section-wrap {
+      margin-top: clamp(16px, 3vw, 24px);
+      margin-bottom: clamp(64px, 8vw, 92px);
+    }
+
+    .speed-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(12px, 2.5vw, 18px);
+      margin-bottom: 22px;
+    }
+
+    .speed-card {
+      position: relative;
+      background: linear-gradient(180deg, rgba(20, 28, 48, 0.7) 0%, rgba(10, 15, 28, 0.85) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: clamp(20px, 3.2vw, 26px) clamp(16px, 2.8vw, 22px);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .speed-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(99, 102, 241, 0.35);
+      box-shadow: 0 22px 48px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .speed-value {
+      font-size: clamp(2rem, 4.5vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: -0.03em;
+      text-align: center;
+    }
+
+    .speed-unit {
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      font-weight: 500;
+      color: #94A3B8;
+      margin-left: 2px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .val-crimson {
+      color: #F87171;
+      text-shadow: 0 0 24px rgba(239, 68, 68, 0.25);
+    }
+
+    .val-amber {
+      color: #FBBF24;
+      text-shadow: 0 0 24px rgba(245, 158, 11, 0.25);
+    }
+
+    .val-emerald {
+      color: #34D399;
+      text-shadow: 0 0 24px rgba(16, 185, 129, 0.25);
+    }
+
+    .speed-label {
+      font-size: clamp(0.84rem, 2vw, 0.92rem);
+      font-weight: 500;
+      color: #94A3B8;
+      letter-spacing: -0.01em;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .speed-benchmark {
+      font-size: clamp(0.68rem, 1.6vw, 0.74rem);
+      color: #64748B;
+      margin-top: 1px;
+      line-height: 1.25;
+      text-align: center;
+      letter-spacing: 0.01em;
+    }
+
+    .speed-benchmark em {
+      font-style: italic;
+      color: #94A3B8;
+      font-weight: 500;
+    }
+
+    /* Descriptions relocated after the boxes */
+    .speed-notes-wrap {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px 28px;
+      margin-top: 18px;
+      margin-bottom: 22px;
+      text-align: left;
+    }
+
+    .speed-note-item {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      font-size: clamp(0.88rem, 2.2vw, 0.96rem);
+      color: #E2E8F0;
+      line-height: 1.6;
+    }
+
+    .speed-note-dash {
+      color: #60A5FA;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .speed-footer-link {
+      text-align: center;
+      margin-top: 18px;
+    }
+
+    .pagespeed-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 20px;
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.22);
+      border-radius: 9999px;
+      color: #60A5FA;
+      font-size: clamp(0.82rem, 2.2vw, 0.88rem);
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .pagespeed-link:hover {
+      background: rgba(59, 130, 246, 0.16);
+      border-color: rgba(59, 130, 246, 0.45);
+      color: #93C5FD;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
+    }
+
+    /* Left-Aligned Section Headings with High Readability and Visual Anchor (No uppercase) */
+    .section-heading {
+      text-align: left;
+      font-size: clamp(1.35rem, 3.6vw, 1.75rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #FFFFFF;
+      margin-bottom: clamp(18px, 3.5vw, 24px);
+      line-height: 1.35;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .heading-pill {
+      display: inline-block;
+      width: 4px;
+      height: 22px;
+      background: linear-gradient(180deg, #3B82F6 0%, #60A5FA 100%);
+      border-radius: 999px;
+      flex-shrink: 0;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    }
+
+    .heading-pill-green {
+      background: linear-gradient(180deg, #10B981 0%, #34D399 100%);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+
+    /* Aligned 1-to-1 Row Flow Layout (Left vs Right with Arrow in between) */
+    .flow-container {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(16px, 3.5vw, 22px);
+      margin-bottom: 0;
+    }
+
+    .flow-row {
+      display: grid;
+      grid-template-columns: 1fr 40px 1fr;
+      align-items: flex-start;
+      gap: clamp(12px, 3vw, 20px);
+    }
+
+    .flow-col-header-row {
+      display: grid;
+      grid-template-columns: 1fr 40px 1fr;
+      align-items: center;
+      gap: clamp(12px, 3vw, 20px);
+      margin-bottom: 4px;
+    }
+
+    .flow-col-title {
+      font-size: clamp(0.76rem, 2vw, 0.82rem);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .col-title-leaks { color: #F87171; }
+    .col-title-consequences { color: #FBBF24; }
+    .col-title-fixes { color: #34D399; }
+    .col-title-results { color: #60A5FA; }
+
+    .bullet-item {
+      display: flex;
+      align-items: flex-start;
+      gap: clamp(10px, 2.5vw, 14px);
+    }
+
+    /* Round Shape Circle Icons with White Glyph */
+    .circle-icon-red {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #EF4444;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.76rem;
+      font-weight: 900;
+      flex-shrink: 0;
+      margin-top: 0;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.45);
+    }
+
+    .circle-icon-amber {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #D97706;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 0;
+      box-shadow: 0 0 14px rgba(217, 119, 6, 0.35);
+    }
+
+    .circle-icon-green {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #10B981;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.76rem;
+      font-weight: 900;
+      flex-shrink: 0;
+      margin-top: 0;
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.45);
+    }
+
+    .circle-icon-blue {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #2563EB;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.76rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 0;
+      box-shadow: 0 0 14px rgba(37, 99, 235, 0.45);
+    }
+
+    .outcome-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.32);
+      color: #34D399;
+      font-size: 0.74rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .bullet-content h4 {
+      font-size: clamp(0.92rem, 2.3vw, 1.02rem);
+      font-weight: 600;
+      color: #FFFFFF;
+      line-height: 1.3;
+      margin-bottom: 3px;
+    }
+
+    .bullet-content p {
+      font-size: clamp(0.78rem, 1.8vw, 0.84rem);
+      color: #94A3B8;
+      line-height: 1.45;
+      font-weight: 400;
+    }
+
+    .flow-arrow {
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      font-size: 1.25rem;
+      line-height: 1;
+      opacity: 0.7;
+    }
+
+    /* Concept Preview Mockup & Outcomes */
+    .concept-preview-wrap {
+      margin-bottom: clamp(64px, 8vw, 92px);
+      text-align: left;
+      width: 100%;
+    }
+
+    .mockup-frame {
+      background: rgba(14, 20, 36, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), 0 0 40px rgba(37, 99, 235, 0.15);
+      position: relative;
+      margin-bottom: clamp(32px, 5vw, 44px);
+      text-align: left;
+    }
+
+    .mockup-viewport {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      background: #0B0F19;
+      display: block;
+    }
+
+    .mockup-img {
+      width: 100%;
+      height: clamp(280px, 48vw, 460px);
+      object-fit: cover;
+      display: block;
+      border: 0;
+      filter: blur(8px) brightness(0.68);
+      transform: scale(1.05);
+      transition: filter 0.3s ease;
+    }
+
+    .mockup-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle, rgba(7, 9, 14, 0.3) 0%, rgba(7, 9, 14, 0.75) 100%);
+      z-index: 5;
+      padding: 16px;
+    }
+
+    .mockup-cta-btn {
+      background: #2563EB;
+      color: #FFFFFF;
+      font-size: clamp(0.92rem, 2.3vw, 1.1rem);
+      font-weight: 700;
+      padding: clamp(14px, 3vw, 18px) clamp(22px, 5vw, 34px);
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 0 35px rgba(37, 99, 235, 0.7), 0 10px 24px rgba(0, 0, 0, 0.5);
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      letter-spacing: -0.01em;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    .mockup-cta-btn:hover {
+      background: #1D4ED8;
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 0 45px rgba(37, 99, 235, 0.9), 0 14px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .mockup-topbar {
+      background: rgba(10, 15, 28, 0.95);
+      padding: clamp(10px, 2.5vw, 12px) clamp(12px, 3vw, 18px);
+      display: grid;
+      grid-template-columns: 70px 1fr 70px;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .mockup-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .mockup-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+
+    .dot-r { background: #EF4444; opacity: 0.7; }
+    .dot-y { background: #F59E0B; opacity: 0.7; }
+    .dot-g { background: #10B981; opacity: 0.7; }
+
+    .mockup-url {
+      font-size: clamp(0.68rem, 2vw, 0.76rem);
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-dim);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px 14px;
+      border-radius: 6px;
+      justify-self: center;
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mockup-topbar-right {
+      /* Balances left dots so searchbar is dead center */
+    }
+
+    /* Expected Outcomes (10 Bullets, Simple Text within 5-6 words) */
+    .outcomes-wrap {
+      margin-top: 0;
+      margin-bottom: clamp(32px, 5vw, 44px);
+    }
+
+    .outcomes-grid-10 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px clamp(16px, 3.5vw, 32px);
+      text-align: left;
+    }
+
+    .outcome-bullet {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: clamp(0.92rem, 2.3vw, 1.02rem);
+      color: #F8FAFC;
+      line-height: 1.55;
+    }
+
+    .bullet-check {
+      color: #10B981;
+      font-weight: 900;
+      font-size: 1.05rem;
+      line-height: 1.35;
+      flex-shrink: 0;
+    }
+
+    /* Transition & Reflection Section (Left-aligned, No Borders) */
+    .transition-section {
+      text-align: left;
+      padding: 0;
+      margin-bottom: clamp(64px, 8vw, 92px);
+      width: 100%;
+    }
+
+    .questions-wrap {
+      max-width: 100%;
+      margin: 0;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .question-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: clamp(0.94rem, 2.4vw, 1.04rem);
+      color: #F8FAFC;
+      line-height: 1.6;
+    }
+
+    .question-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      color: #93C5FD;
+      font-size: 0.76rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Clean Streamlined Bullet Lists (No Consequences / No Descriptions) */
+    .clean-bullet-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px clamp(16px, 3vw, 24px);
+      text-align: left;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .clean-bullet-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+    }
+
+    .clean-bullet-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(15, 23, 42, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 12px 16px;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .clean-bullet-item:hover {
+      border-color: rgba(59, 130, 246, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .clean-bullet-item h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #FFFFFF;
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    /* Features Section - Clean text list, no boxes, hyphens, 4-6 words */
+    .features-wrap {
+      margin-top: clamp(36px, 5vw, 48px);
+      margin-bottom: clamp(40px, 5.5vw, 56px);
+      text-align: left;
+      width: 100%;
+    }
+
+    .features-grid-nobox {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px clamp(16px, 3.5vw, 32px);
+      text-align: left;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    @media (max-width: 640px) {
+      .features-grid-nobox {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+    }
+
+    .feature-line-nobox {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      font-size: 0.96rem;
+      color: #F1F5F9;
+      line-height: 1.4;
+      background: none;
+      border: none;
+      padding: 4px 0;
+    }
+
+    .feature-hyphen {
+      color: var(--blue-accent);
+      font-weight: 800;
+      font-size: 1.15rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .feature-line-nobox span.feature-text {
+      color: #F1F5F9;
+      font-weight: 500;
+    }
+
+
+    /* Founder Quote Card (Placed After Expected Outcomes) */
+    .founder-quote-wrap {
+      margin-top: clamp(32px, 5vw, 44px);
+      margin-bottom: clamp(64px, 8vw, 92px);
+      width: 100%;
+    }
+
+    .founder-quote-card {
+      background: linear-gradient(135deg, rgba(20, 28, 52, 0.8) 0%, rgba(10, 16, 32, 0.95) 55%, rgba(16, 24, 44, 0.85) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.22);
+      border-radius: 20px;
+      padding: clamp(28px, 4.5vw, 38px) clamp(24px, 4vw, 36px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      align-items: center;
+      gap: clamp(24px, 4vw, 40px);
+      max-width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .founder-quote-card::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.16) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .founder-profile {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      gap: 12px;
+      padding-right: clamp(16px, 2.5vw, 24px);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .founder-avatar {
+      width: clamp(124px, 16vw, 150px);
+      height: clamp(124px, 16vw, 150px);
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid rgba(96, 165, 250, 0.5);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 28px rgba(59, 130, 246, 0.35);
+    }
+
+    .founder-profile-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      gap: 3px;
+    }
+
+    .founder-name {
+      font-size: clamp(1.05rem, 2.2vw, 1.15rem);
+      font-weight: 700;
+      color: #FFFFFF;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .founder-designation {
+      font-size: clamp(0.78rem, 1.8vw, 0.84rem);
+      color: #94A3B8;
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .founder-company {
+      font-size: clamp(0.78rem, 1.8vw, 0.84rem);
+      color: #60A5FA;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      margin-top: 2px;
+      text-decoration: none;
+      display: inline-block;
+      transition: color 0.15s ease;
+    }
+
+    .founder-company:hover {
+      color: #93C5FD;
+      text-decoration: underline;
+    }
+
+    .founder-quote-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      gap: 8px;
+      position: relative;
+    }
+
+    .quote-mark {
+      font-family: Georgia, serif;
+      font-size: 3.2rem;
+      line-height: 1;
+      color: #60A5FA;
+      opacity: 0.55;
+      margin-bottom: -18px;
+      user-select: none;
+    }
+
+    .founder-quote-text {
+      font-size: clamp(0.96rem, 2.3vw, 1.1rem);
+      font-style: italic;
+      color: #F1F5F9;
+      line-height: 1.65;
+      letter-spacing: -0.01em;
+    }
+
+    .founder-quote-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      margin-top: 6px;
+    }
+
+    /* Booking Pitch & Action Buttons (Restored Footer Area) */
+    .booking-pitch-wrap {
+      text-align: center;
+      max-width: 900px;
+      margin: clamp(36px, 5vw, 48px) auto 20px auto;
+      padding: 0 16px;
+    }
+
+    .booking-pitch-text {
+      font-size: clamp(1.02rem, 2.3vw, 1.15rem);
+      color: #E2E8F0;
+      line-height: 1.6;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+
+    .cta-actions-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .btn-primary {
+      background: #2563EB;
+      color: #FFFFFF;
+      font-size: 0.96rem;
+      font-weight: 700;
+      padding: 13px 28px;
+      border-radius: 10px;
+      text-decoration: none;
+      box-shadow: 0 0 28px rgba(37, 99, 235, 0.45);
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-primary:hover {
+      background: #1D4ED8;
+      transform: translateY(-2px);
+      box-shadow: 0 0 36px rgba(37, 99, 235, 0.65);
+    }
+
+    .email-reply-link {
+      font-size: clamp(0.88rem, 2vw, 0.95rem);
+      color: #94A3B8;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-color: rgba(148, 163, 184, 0.4);
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .email-reply-link:hover {
+      color: #FFFFFF;
+      text-decoration-color: #FFFFFF;
+    }
+
+    /* Clean Audit Done By & Email Sign-off (Refined Spacing & Modern Pill Badge) */
+    .audit-author-box {
+      margin-top: clamp(40px, 5.5vw, 56px);
+      padding-top: clamp(24px, 3.5vw, 32px);
+      padding-bottom: 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      text-align: center;
+    }
+
+    .audit-by-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .audit-by-label {
+      font-size: clamp(0.78rem, 2vw, 0.84rem);
+      color: #94A3B8;
+      font-weight: 500;
+    }
+
+    .audit-by-logo {
+      height: 24px;
+      width: auto;
+      display: inline-block;
+      vertical-align: middle;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .audit-by-logo-link:hover .audit-by-logo {
+      opacity: 0.82;
+      transform: translateY(-1px);
+    }
+
+    .audit-email-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-size: clamp(0.82rem, 1.8vw, 0.88rem);
+      color: #94A3B8;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 7px 18px;
+      border-radius: 999px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    .audit-email-row:hover {
+      background: rgba(59, 130, 246, 0.08);
+      border-color: rgba(96, 165, 250, 0.35);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.2);
+    }
+
+    .email-icon {
+      color: #60A5FA;
+      flex-shrink: 0;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .audit-author-email {
+      color: #E2E8F0;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.15s ease;
+    }
+
+    .audit-author-email:hover {
+      color: #60A5FA;
+    }
+
+    /* Fully responsive media queries for all device classes */
+    @media (max-width: 860px) {
+      .speed-grid { grid-template-columns: repeat(2, 1fr); }
+      .flow-col-header-row { display: none; }
+      .flow-row {
+        position: relative;
+        grid-template-columns: 1fr;
+        gap: 6px;
+        margin-bottom: 24px;
+        padding-bottom: 0;
+        border-bottom: none;
+      }
+      .flow-row:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+      .flow-arrow {
+        justify-self: start;
+        width: 26px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: rotate(90deg);
+        transform-origin: center center;
+        color: #64748B;
+        font-size: 1.15rem;
+        line-height: 1;
+        margin: 0;
+        opacity: 0.85;
+      }
+      .features-grid-nobox { grid-template-columns: 1fr; gap: 8px; }
+    }
+
+    @media (max-width: 720px) {
+      .founder-quote-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 20px;
+        padding: 26px 18px;
+      }
+      .founder-profile {
+        padding-right: 0;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding-bottom: 18px;
+        align-items: center;
+        text-align: center;
+      }
+      .founder-profile-info {
+        align-items: center;
+        text-align: center;
+      }
+      .founder-quote-content {
+        align-items: center;
+        text-align: center;
+      }
+      .quote-mark {
+        margin-bottom: -10px;
+      }
+      .founder-quote-actions {
+        justify-content: center;
+        width: 100%;
+      }
+      .founder-quote-actions .btn-primary {
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .header-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+      .header-menu {
+        order: 2;
+        width: auto;
+        justify-content: flex-end;
+        padding: 0;
+      }
+      .menu-item {
+        flex: initial;
+        text-align: right;
+        padding: 0;
+      }
+    }
+
+    @media (max-width: 580px) {
+      .speed-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .speed-notes-wrap { grid-template-columns: 1fr; gap: 8px; }
+      .mockup-topbar { grid-template-columns: 45px 1fr 45px; padding: 8px 10px; }
+      .cta-row { flex-direction: column; width: 100%; }
+      .btn-primary, .btn-secondary { width: 100%; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .site-header {
+        padding: 11px 14px;
+        top: 8px;
+        margin-top: 6px;
+        margin-bottom: 10px;
+        border-radius: 12px;
+      }
+      .company-name { font-size: 0.92rem; }
+      .menu-item { font-size: 0.86rem; }
+      .hero { padding: 36px 0 18px 0; }
+      .hero-heading { font-size: clamp(1.6rem, 6.8vw, 2.05rem); line-height: 1.25; }
+      .hero-desc { font-size: 0.94rem; }
+      .speed-card { padding: 14px 10px; }
+      .speed-value { font-size: 1.85rem; }
+      .audit-section { margin-bottom: 48px; }
+      .mockup-frame { border-radius: 10px; }
+      .audit-author-box { margin-top: 36px; padding-top: 20px; }
+    }
+
+    @media (max-width: 360px) {
+      .speed-grid { grid-template-columns: 1fr; }
+    }
+    /* Floating Quick Action Bar on Scroll */
+    .floating-cta-bar {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 999px;
+      padding: 8px 16px 8px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.65);
+      z-index: 999;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .floating-cta-bar.visible {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .floating-cta-text {
+      font-size: 0.86rem;
+      color: #E2E8F0;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .floating-cta-btn {
+      background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+      color: #FFFFFF;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 0 14px rgba(37, 99, 235, 0.4);
+      white-space: nowrap;
+    }
+
+    .floating-cta-btn:hover {
+      box-shadow: 0 0 20px rgba(37, 99, 235, 0.7);
+    }
+
+    @media (max-width: 640px) {
+      .floating-cta-bar {
+        width: calc(100% - 32px);
+        max-width: 420px;
+        justify-content: space-between;
+        padding: 8px 12px 8px 16px;
+        gap: 8px;
+        bottom: 14px;
+      }
+      .floating-cta-text {
+        font-size: 0.78rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .floating-cta-btn {
+        font-size: 0.76rem;
+        padding: 7px 12px;
+      }
+    }
+  
+    /* === VERSION 2 INTERACTIVE ENHANCEMENTS === */
+    .v2-pill-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(37, 99, 235, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      color: #93C5FD;
+      margin-bottom: 16px;
+    }
+
+    /* Interactive Revenue Loss Calculator */
+    .calc-card {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 16px;
+      padding: clamp(20px, 3.5vw, 32px);
+      margin-top: clamp(28px, 4vw, 40px);
+      margin-bottom: clamp(32px, 5vw, 48px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .calc-card::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.14) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .calc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .calc-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin: 0;
+    }
+
+    .calc-subtitle {
+      font-size: 0.88rem;
+      color: #94A3B8;
+      margin-top: 4px;
+    }
+
+    .calc-controls {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 640px) {
+      .calc-controls { grid-template-columns: 1fr; }
+    }
+
+    .calc-control-group {
+      background: rgba(10, 15, 30, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+
+    .calc-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #64748B;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .calc-slider-val {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #38BDF8;
+      margin-bottom: 8px;
+    }
+
+    .calc-slider {
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.15);
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      cursor: pointer;
+    }
+
+    .calc-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #38BDF8;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+      cursor: pointer;
+    }
+
+    .calc-result-box {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .calc-result-title {
+      font-size: 0.88rem;
+      color: #94A3B8;
+    }
+
+    .calc-result-number {
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: #34D399;
+      letter-spacing: -0.02em;
+    }
+  </style>
+
+</head>
+<body>
+
+  <!-- Ambient Light & Gradient Effects -->
+  <div class="spotlight-top"></div>
+  <div class="spotlight-leaks"></div>
+  <div class="spotlight-questions"></div>
+  <div class="spotlight-fixes"></div>
+  <div class="spotlight-prototype"></div>
+  <div class="spotlight-bottom"></div>
+
+  <div class="container">
+
+    <!-- Minimal Header: Company Name & Menu (Issues -> Fixes) Aligned Left -->
+    <header class="site-header">
+      <div class="header-inner">
+        <!-- Audit Name (Clean typography, no border, no bg, links to client site) -->
+        <div class="info-box">
+          <a href="https://asheatingcooling.com/" target="_blank" rel="noopener noreferrer" class="company-name">A & S Heating & Cooling</a>
+        </div>
+
+        <!-- Menu: Issues -> Fixes -->
+        <nav class="header-menu">
+          <a href="#issues" class="menu-item">Issues</a>
+          <span class="menu-arrow">&rarr;</span>
+          <a href="#fixes" class="menu-item">Fixes</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Center Aligned Hero with Light Effect -->
+    <section class="hero">
+      <h1 class="hero-heading">
+        Make <span class="company-highlight">A & S Heating & Cooling</span> standout and generate 2x lead
+      </h1>
+      <p class="hero-desc">
+        We ran an in-depth audit on <u>asheatingcooling.com</u>. Mobile scores <span class='text-warn-highlight'>38/100</span>, and the hero takes <strong>6.4 seconds</strong> to load. <em>Most emergency callers on phones won’t wait that long.</em> We built a <span class='text-highlight'>fast concept version</span> so you can see the difference.
+      </p>
+    </section>
+
+    <!-- Version 2 Feature: Interactive Revenue & Lead Recovery Calculator -->
+    <div class="calc-card">
+      <div class="calc-header">
+        <div>
+          <span class="v2-pill-banner">Interactive Estimator</span>
+          <h3 class="calc-title">Portland HVAC Revenue Recovery Calculator</h3>
+          <p class="calc-subtitle">Estimate how much revenue your current 6.4s mobile speed is leaking to local competitors each month.</p>
+        </div>
+      </div>
+
+      <div class="calc-controls">
+        <div class="calc-control-group">
+          <span class="calc-label">Average Ticket / Job Value</span>
+          <div class="calc-slider-val" id="val-ticket">$4,800</div>
+          <input type="range" min="1500" max="8500" step="100" value="4800" class="calc-slider" id="slider-ticket" oninput="updateV2Calc()">
+        </div>
+        <div class="calc-control-group">
+          <span class="calc-label">Monthly Emergency & Install Calls Lost</span>
+          <div class="calc-slider-val" id="val-jobs">15 jobs</div>
+          <input type="range" min="5" max="40" step="1" value="15" class="calc-slider" id="slider-jobs" oninput="updateV2Calc()">
+        </div>
+      </div>
+
+      <div class="calc-result-box">
+        <div>
+          <div class="calc-result-title">Monthly Recoverable Revenue (at 0.8s load speed & 1-tap dialer)</div>
+          <div style="font-size: 0.8rem; color: #64748B; margin-top: 2px;">Based on recovering 15 abandoned calls at $4,800 avg HVAC replacement value</div>
+        </div>
+        <div class="calc-result-number" id="calc-total">+$72,000 / mo</div>
+      </div>
+    </div>
+
+
+    <!-- Google Insights Results (Clean Cards + Relocated Descriptions) -->
+    <section class="speed-section-wrap">
+      <div class="speed-grid">
+        
+        <div class="speed-card">
+          <div class="speed-value val-crimson">38<span class="speed-unit">/100</span></div>
+          <div class="speed-label">Mobile score</div>
+          <div class="speed-benchmark"><em>usual: 90+</em></div>
+        </div>
+
+        <div class="speed-card">
+          <div class="speed-value val-crimson">3.5<span class="speed-unit">/10</span></div>
+          <div class="speed-label">Design score</div>
+          <div class="speed-benchmark"><em>usual: 9+ / 10</em></div>
+        </div>
+
+        <div class="speed-card">
+          <div class="speed-value val-amber">2.3<span class="speed-unit">s</span></div>
+          <div class="speed-label">First contentful paint</div>
+          <div class="speed-benchmark"><em>usual: &lt; 1.8s</em></div>
+        </div>
+
+        <div class="speed-card">
+          <div class="speed-value val-crimson">6.4<span class="speed-unit">s</span></div>
+          <div class="speed-label">Largest contentful paint</div>
+          <div class="speed-benchmark"><em>usual: &lt; 2.5s</em></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 1: Problems / Leaks & Consequences (1-to-1 Aligned Flow) -->
+    <section class="audit-section" id="issues">
+      <h2 class="section-heading"><span class="heading-pill"></span> Also, we found these critical leaks</h2>
+
+      <div class="clean-bullet-grid">
+        <div class="clean-bullet-item">
+          <div class="circle-icon-red">&#10005;</div>
+          <h4>Stale 2021 copyright & <u>bloated Elementor plugins</u></h4>
+        </div>
+        <div class="clean-bullet-item">
+          <div class="circle-icon-red">&#10005;</div>
+          <h4>Dead universal analytics tag</h4>
+        </div>
+        <div class="clean-bullet-item">
+          <div class="circle-icon-red">&#10005;</div>
+          <h4>Weak hero headline</h4>
+        </div>
+        <div class="clean-bullet-item">
+          <div class="circle-icon-red">&#10005;</div>
+          <h4>No sticky phone dialer</h4>
+        </div>
+        <div class="clean-bullet-item">
+          <div class="circle-icon-red">&#10005;</div>
+          <h4>Missing instant quote funnel</h4>
+        </div>
+        <div class="clean-bullet-item">
+          <div class="circle-icon-red">&#10005;</div>
+          <h4>Heavy Revolution Slider overhead</h4>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Questions (Raised by the Audit) -->
+    <section class="audit-section transition-section" id="questions">
+      <h2 class="section-heading">
+        <span class="heading-pill"></span> The audit has raised these questions
+      </h2>
+
+      <div class="questions-wrap">
+        <div class="question-row">
+          <span class="question-num">1</span>
+          <span>Can Portland homeowners tap to call your emergency dispatch in under 15 seconds?</span>
+        </div>
+        <div class="question-row">
+          <span class="question-num">2</span>
+          <span>Does a stale 2021 copyright footer reflect your active heating and cooling team today?</span>
+        </div>
+        <div class="question-row">
+          <span class="question-num">3</span>
+          <span>How many <u>$4,800+ commercial and residential HVAC bids</u> are lost each quarter?</span>
+        </div>
+        <div class="question-row">
+          <span class="question-num">4</span>
+          <span>Did you know Google penalizes mobile sites taking <span class='text-warn-highlight'>6.4s to load</span>?</span>
+        </div>
+        <div class="question-row">
+          <span class="question-num">5</span>
+          <span>What would 12 to 20 extra booked furnace and AC replacements mean monthly?</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Solutions (This is how we fixed them) -->
+    <section class="audit-section" id="fixes">
+      <h2 class="section-heading"><span class="heading-pill heading-pill-green"></span> This is how we fixed them</h2>
+
+      <div class="clean-bullet-grid">
+        <div class="clean-bullet-item">
+          <div class="circle-icon-green">&#10003;</div>
+          <h4>Pre-rendered <span class="text-highlight">ultra-fast network</span> architecture</h4>
+        </div>
+        <div class="clean-bullet-item">
+          <div class="circle-icon-green">&#10003;</div>
+          <h4>Sub-second <span class="text-highlight">0.8s mobile load</span> speed</h4>
+        </div>
+        <div class="clean-bullet-item">
+          <div class="circle-icon-green">&#10003;</div>
+          <h4>Clean GA4 tracking for Google search overviews</h4>
+        </div>
+        <div class="clean-bullet-item">
+          <div class="circle-icon-green">&#10003;</div>
+          <h4>Hero <u>CCB license badges</u> above fold</h4>
+        </div>
+        <div class="clean-bullet-item">
+          <div class="circle-icon-green">&#10003;</div>
+          <h4>Sticky 1-tap dialer that <span class="text-highlight">captures urgent callers</span></h4>
+        </div>
+        <div class="clean-bullet-item">
+          <div class="circle-icon-green">&#10003;</div>
+          <h4>Frictionless layout with <span class="text-highlight">45% mobile call</span> increase</h4>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: The New Design (Mockup Frame) -->
+    <section class="audit-section concept-preview-wrap" id="prototype">
+      <h2 class="section-heading" style="max-width: 900px; line-height: 1.35;">
+        <span class="heading-pill"></span> Fixes pushed to this concept
+      </h2>
+
+      <!-- Browser Mockup Image Frame with Blur Effect & Button -->
+      <div class="mockup-frame">
+        <div class="mockup-topbar">
+          <div class="mockup-dots">
+            <span class="mockup-dot dot-r"></span>
+            <span class="mockup-dot dot-y"></span>
+            <span class="mockup-dot dot-g"></span>
+          </div>
+          <div class="mockup-url">asheatingcooling.com</div>
+          <div class="mockup-topbar-right"></div>
+        </div>
+        <div class="mockup-viewport">
+          <img src="concept-preview.jpg" alt="Fresh high-converting website concept preview for A & S Heating & Cooling" class="mockup-img">
+          <div class="mockup-overlay">
+            <a href="https://cal.com/inkash-n5ihxh/30min" target="_blank" rel="noopener noreferrer" class="mockup-cta-btn">
+              Book a 10 minute meeting to checkout &rarr;
+            </a>
+          </div>
+              </div>
+      </div>
+
+      <!-- Section 5: Modern Features (7 features + 8th: many more in underline & italic) -->
+      <div class="features-wrap" id="features">
+        <h3 class="section-heading" style="margin-bottom: 16px;">
+          <span class="heading-pill"></span> Modern features included in this build
+        </h3>
+
+        <div class="features-grid-nobox">
+          <div class="feature-line-nobox">
+            <span class="feature-hyphen">-</span>
+            <span class="feature-text">24/7 AI chat bot</span>
+          </div>
+          <div class="feature-line-nobox">
+            <span class="feature-hyphen">-</span>
+            <span class="feature-text">Automated lead dispatch</span>
+          </div>
+          <div class="feature-line-nobox">
+            <span class="feature-hyphen">-</span>
+            <span class="feature-text">Client intake management</span>
+          </div>
+          <div class="feature-line-nobox">
+            <span class="feature-hyphen">-</span>
+            <span class="feature-text">Automated review collection</span>
+          </div>
+          <div class="feature-line-nobox">
+            <span class="feature-hyphen">-</span>
+            <span class="feature-text">Instant quote estimator</span>
+          </div>
+          <div class="feature-line-nobox">
+            <span class="feature-hyphen">-</span>
+            <span class="feature-text">Online booking and scheduling</span>
+          </div>
+          <div class="feature-line-nobox">
+            <span class="feature-hyphen">-</span>
+            <span class="feature-text">Speed to lead auto responder</span>
+          </div>
+          <div class="feature-line-nobox">
+            <span class="feature-hyphen">-</span>
+            <span class="feature-text"><u><em>many more</em></u></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pitch Paragraph (Positioned Right on Top of Founder Section) -->
+      <div class="booking-pitch-wrap" style="margin-top: clamp(40px, 5.5vw, 56px); margin-bottom: clamp(24px, 3.5vw, 32px);">
+        <p class="booking-pitch-text">
+          We already fixed every critical issue in your new prototype and are ready to walk you through it.
+        </p>
+      </div>
+
+      <!-- Founder Section (Right After Pitch Paragraph) -->
+      <div class="founder-quote-wrap" style="margin-top: 0; margin-bottom: clamp(48px, 6vw, 68px);">
+        <div class="founder-quote-card">
+          <!-- Left Side: Profile Photo, Name, Designation & Company -->
+          <div class="founder-profile">
+            <img src="emad.jpg" alt="Emad - Founder, Inkash Agency" class="founder-avatar">
+            <div class="founder-profile-info">
+              <div class="founder-name">Emad</div>
+              <div class="founder-designation">Founder</div>
+              <a href="https://www.inkash.agency" target="_blank" rel="noopener noreferrer" class="founder-company">Inkash Agency</a>
+            </div>
+          </div>
+
+          <!-- Right Side: Founder's Direct Quote & Booking Button -->
+          <div class="founder-quote-content">
+            <div class="quote-mark">&ldquo;</div>
+            <blockquote class="founder-quote-text">
+              It takes less than <u>10 minutes</u> to show what is bottlenecking your website and walk you through the fixes. Would you rather take 10 minutes to eliminate these leaks and <span class="text-highlight">3x your results</span>, or let qualified leads slip away? <u>No commitment, no cost</u>.
+            </blockquote>
+            <div class="founder-quote-actions">
+              <a href="https://cal.com/inkash-n5ihxh/30min" target="_blank" rel="noopener noreferrer" class="btn-primary">
+                Book a 10 minute meeting &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Audit Done By & Email Sign-off -->
+      <div class="audit-author-box">
+        <div class="audit-by-row">
+          <span class="audit-by-label">Audit done by</span>
+          <a href="https://www.inkash.agency" target="_blank" rel="noopener noreferrer" class="audit-by-logo-link" style="display: inline-flex; align-items: center;">
+            <img src="inkash-logo-white.png" alt="Inkash Agency" class="audit-by-logo">
+          </a>
+        </div>
+        <div class="audit-email-row">
+          <svg class="email-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L1 7"></path>
+          </svg>
+          <a href="mailto:emad@inkash.agency" class="audit-author-email">emad@inkash.agency</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Real-time Telegram Alert & Visit Tracking (Zero Spam/Deliverability Penalty) -->
+  <script>
+
+    // Version 2 Interactive Calculator Logic
+    function updateV2Calc() {
+      var ticket = parseInt(document.getElementById('slider-ticket').value);
+      var jobs = parseInt(document.getElementById('slider-jobs').value);
+      document.getElementById('val-ticket').innerText = '$' + ticket.toLocaleString();
+      document.getElementById('val-jobs').innerText = jobs + ' jobs';
+      var total = ticket * jobs;
+      document.getElementById('calc-total').innerText = '+$' + total.toLocaleString() + ' / mo';
+    }
+
+    (function() {
+      var clientName = "A & S Heating & Cooling";
+      var clientSlug = "asheatingcooling";
+      var auditSendNumber = "Audit #31";
+      var sessionStartTime = Date.now();
+      var arrivalDate = new Date();
+      var arrivalTimeFormatted = arrivalDate.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
+      });
+      var visitDateFormatted = arrivalDate.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      });
+
+      // Store initial visit time immediately on landing
+      try {
+        localStorage.setItem("inkash_visit_start_" + clientSlug, sessionStartTime.toString());
+        localStorage.setItem("inkash_arrival_" + clientSlug, arrivalTimeFormatted + " (" + visitDateFormatted + ")");
+      } catch(e) {}
+
+      var BOT_TOKEN = "9134859977:AAEMRjZWRfJv8MJOQkh4ya7f5U9cf1Y9JpU";
+      var CHAT_ID = "6646335562";
+
+      var cachedGeo = null;
+      var maxScrollPercent = 10;
+      var hasSentExit = false;
+
+      // Prefetch IP and geolocation immediately in background so it's ready before exit
+      try {
+        var savedGeo = localStorage.getItem("inkash_geo_" + clientSlug);
+        if (savedGeo) {
+          cachedGeo = JSON.parse(savedGeo);
+        }
+      } catch(e) {}
+
+      fetch("https://ipwho.is/")
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data && data.ip) {
+            cachedGeo = data;
+            try {
+              localStorage.setItem("inkash_geo_" + clientSlug, JSON.stringify(data));
+            } catch(e) {}
+          }
+        })
+        .catch(function() {});
+
+      function getDeviceInfo() {
+        var isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
+        return isMobile ? "📱 Smartphone (Mobile)" : "💻 Desktop / Laptop";
+      }
+
+      function getGeoDetails(geo) {
+        var g = geo || cachedGeo;
+        var ip = (g && g.ip) ? g.ip : "Detecting...";
+        var locParts = [];
+        if (g && g.city) locParts.push(g.city);
+        if (g && g.region) locParts.push(g.region);
+        if (g && g.country) locParts.push(g.country);
+        var loc = locParts.length > 0 ? locParts.join(", ") : "Detecting...";
+        var isp = (g && g.connection && g.connection.isp) ? (" (" + g.connection.isp + ")") : "";
+        return { ip: ip, loc: loc, isp: isp };
+      }
+
+      // Robust exit dispatcher (Sends strictly once via Beacon -> Fetch Keepalive -> GET Beacon)
+      function postTelegramReliable(text) {
+        var baseEndpoint = "https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage";
+        var queryUrl = baseEndpoint + "?chat_id=" + encodeURIComponent(CHAT_ID) + "&text=" + encodeURIComponent(text);
+
+        // 1. FormData Beacon (W3C standard for unload/visibilitychange; returns true if queued)
+        if (navigator.sendBeacon) {
+          try {
+            var fd = new FormData();
+            fd.append("chat_id", CHAT_ID);
+            fd.append("text", text);
+            if (navigator.sendBeacon(baseEndpoint, fd)) {
+              return;
+            }
+          } catch(e) {}
+        }
+
+        // 2. Fetch fallback with keepalive: true (keeps request alive after page close)
+        if (window.fetch) {
+          try {
+            var fd2 = new FormData();
+            fd2.append("chat_id", CHAT_ID);
+            fd2.append("text", text);
+            fetch(baseEndpoint, {
+              method: "POST",
+              body: fd2,
+              keepalive: true,
+              mode: "no-cors"
+            }).catch(function() {});
+            return;
+          } catch(e) {}
+        }
+
+        // 3. Fallback Instant Image GET Tracking Beacon (No CORS preflight)
+        try {
+          var beaconImg = new Image();
+          beaconImg.src = queryUrl;
+        } catch(e) {}
+      }
+
+      // Accurate Scroll Depth Calculator
+      function updateScrollDepth() {
+        try {
+          var scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+          var winHeight = window.innerHeight || document.documentElement.clientHeight || 800;
+          var docHeight = Math.max(
+            document.body.scrollHeight || 0,
+            document.documentElement.scrollHeight || 0,
+            document.body.offsetHeight || 0,
+            document.documentElement.offsetHeight || 0
+          );
+          if (docHeight > 0) {
+            var viewedPx = scrollY + winHeight;
+            var pct = Math.min(100, Math.max(10, Math.round((viewedPx / docHeight) * 100)));
+            if (pct > maxScrollPercent) {
+              maxScrollPercent = pct;
+              try {
+                localStorage.setItem("inkash_scroll_depth_" + clientSlug, maxScrollPercent + "%");
+              } catch(e) {}
+            }
+          }
+        } catch(e) {}
+      }
+
+      window.addEventListener("scroll", updateScrollDepth, { passive: true });
+      window.addEventListener("resize", updateScrollDepth, { passive: true });
+      document.addEventListener("DOMContentLoaded", updateScrollDepth);
+      setTimeout(updateScrollDepth, 600);
+
+      // Handle Exit: Send the update ONLY ONCE when user leaves
+      function handleExit() {
+        // Enforce strict one-time execution per session
+        if (hasSentExit) return;
+        var alreadySent = sessionStorage.getItem("inkash_exit_sent_" + clientSlug);
+        if (alreadySent === "true") return;
+
+        hasSentExit = true;
+        try {
+          sessionStorage.setItem("inkash_exit_sent_" + clientSlug, "true");
+        } catch(e) {}
+
+        updateScrollDepth();
+
+        var durationMs = Date.now() - sessionStartTime;
+        var totalSeconds = Math.max(1, Math.round(durationMs / 1000));
+        var min = Math.floor(totalSeconds / 60);
+        var remSec = totalSeconds % 60;
+        var durationStr = min > 0
+          ? (min + " min " + remSec + " sec (" + totalSeconds + "s total)")
+          : (totalSeconds + " seconds");
+
+        var leavingTimeFormatted = new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true
+        });
+
+        // Before leaving, store the visit time and metrics in storage
+        try {
+          localStorage.setItem("inkash_visit_time_" + clientSlug, arrivalTimeFormatted + " (" + visitDateFormatted + ")");
+          localStorage.setItem("inkash_leaving_time_" + clientSlug, leavingTimeFormatted);
+          localStorage.setItem("inkash_duration_" + clientSlug, durationStr);
+          localStorage.setItem("inkash_seconds_spent_" + clientSlug, totalSeconds.toString());
+          localStorage.setItem("inkash_scroll_depth_" + clientSlug, maxScrollPercent + "%");
+        } catch(e) {}
+
+        var geoInfo = getGeoDetails(cachedGeo);
+        var deviceText = getDeviceInfo();
+
+        var exitLines = [
+          "🚪 [Lead Left Website] " + clientName + " (" + auditSendNumber + ")",
+          "",
+          "🏢 Lead: " + clientName,
+          "⏱️ Time on Website: " + durationStr,
+          "📜 Page Scrolled: " + maxScrollPercent + "% of total page viewed",
+          "🌐 IP Address: " + geoInfo.ip,
+          "📍 Location: " + geoInfo.loc + geoInfo.isp,
+          "📱 Device: " + deviceText,
+          "⏰ Visit Time: Landed at " + arrivalTimeFormatted + " | Left at " + leavingTimeFormatted,
+          "🔗 Page: " + window.location.href,
+          "",
+          "👉 Summary: Prospect spent " + durationStr + " on the site and scrolled through " + maxScrollPercent + "% of the audit."
+        ];
+
+        var exitMessage = exitLines.join(String.fromCharCode(10));
+        postTelegramReliable(exitMessage);
+      }
+
+      // Bind departure events so exit fires reliably when user leaves
+      window.addEventListener("pagehide", handleExit);
+      window.addEventListener("beforeunload", handleExit);
+      window.addEventListener("unload", handleExit);
+      document.addEventListener("visibilitychange", function() {
+        if (document.visibilityState === "hidden") {
+          handleExit();
+        }
+      });
+
+      // Optional CTA Click tracking (Reliable Beacon)
+      document.addEventListener("DOMContentLoaded", function() {
+        var ctaButtons = document.querySelectorAll('a[href*="cal.com"]');
+        ctaButtons.forEach(function(btn) {
+          btn.addEventListener("click", function() {
+            var geoInfo = getGeoDetails(cachedGeo);
+            var ctaLines = [
+              "🎯 [CTA Click] " + clientName + " (" + auditSendNumber + ")",
+              "🏢 Lead: " + clientName,
+              "🔘 Clicked: " + (btn.innerText || "Book Call").replace(/[^a-zA-Z0-9 ]/g, '').trim(),
+              "🌐 IP: " + geoInfo.ip,
+              "📍 Location: " + geoInfo.loc + geoInfo.isp
+            ];
+            postTelegramReliable(ctaLines.join(String.fromCharCode(10)));
+          });
+        });
+
+        // Smooth Scroll-Triggered Fade In Up Animations
+        var animSelectors = [
+          ".hero-heading",
+          ".hero-desc",
+          ".speed-card",
+          ".section-heading",
+          ".flow-row",
+          ".mockup-frame",
+          ".outcomes-wrap",
+          ".outcome-bullet",
+          ".question-row",
+          ".booking-pitch-wrap",
+          ".cta-actions-wrap",
+          ".audit-author-box"
+        ];
+
+        var animElements = document.querySelectorAll(animSelectors.join(", "));
+        animElements.forEach(function(el) {
+          el.classList.add("fade-in-up");
+        });
+
+        if ("IntersectionObserver" in window) {
+          var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                observer.unobserve(entry.target);
+              }
+            });
+          }, {
+            rootMargin: "0px 0px -40px 0px",
+            threshold: 0.05
+          });
+
+          animElements.forEach(function(el) {
+            observer.observe(el);
+          });
+        } else {
+          animElements.forEach(function(el) {
+            el.classList.add("is-visible");
+          });
+        }
+
+        // Fluid, Responsive Anchor Scrolling with Sticky Header Offset
+        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+          anchor.addEventListener("click", function(e) {
+            var targetId = this.getAttribute("href");
+            if (targetId && targetId !== "#") {
+              var targetEl = document.querySelector(targetId);
+              if (targetEl) {
+                e.preventDefault();
+                var headerOffset = 84;
+                var elementPosition = targetEl.getBoundingClientRect().top;
+                var targetPosition = elementPosition + (window.pageYOffset || document.documentElement.scrollTop) - headerOffset;
+                window.scrollTo({
+                  top: targetPosition,
+                  behavior: "smooth"
+                });
+              }
+            }
+          });
+        });
+      });
+    })();
+  </script>
+
+  <!-- Floating Quick Action Pill on Scroll -->
+  <div class="floating-cta-bar" id="floatingCta">
+    <div class="floating-cta-text">A & S Heating & Cooling &mdash; Ready to see your prototype?</div>
+    <a href="https://cal.com/inkash-n5ihxh/30min" target="_blank" rel="noopener noreferrer" class="floating-cta-btn">
+      Book a 10 minute meeting &rarr;
+    </a>
+  </div>
+
+  <script>
+
+    // Version 2 Interactive Calculator Logic
+    function updateV2Calc() {
+      var ticket = parseInt(document.getElementById('slider-ticket').value);
+      var jobs = parseInt(document.getElementById('slider-jobs').value);
+      document.getElementById('val-ticket').innerText = '$' + ticket.toLocaleString();
+      document.getElementById('val-jobs').innerText = jobs + ' jobs';
+      var total = ticket * jobs;
+      document.getElementById('calc-total').innerText = '+$' + total.toLocaleString() + ' / mo';
+    }
+
+    window.addEventListener('scroll', function() {
+      var bar = document.getElementById('floatingCta');
+      if (bar) {
+        if (window.scrollY > 450) {
+          bar.classList.add('visible');
+        } else {
+          bar.classList.remove('visible');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
